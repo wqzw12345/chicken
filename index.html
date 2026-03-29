@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>酥脆灵魂 - 顶级炸鸡体验</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Alpine.js 用于处理点击逻辑 -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap');
+        .font-brand { font-family: 'ZCOOL KuaiLe', cursive; }
+        .bg-fried-chicken {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="bg-yellow-50 text-gray-800" x-data="{ cartOpen: false, paySuccess: false, cartTotal: 0 }">
+
+    <!-- 导航栏 -->
+    <nav class="flex justify-between items-center p-6 bg-white shadow-md sticky top-0 z-50">
+        <div class="text-2xl font-bold text-orange-600 font-brand">🍗 酥脆灵魂</div>
+        <div class="space-x-6 flex items-center">
+            <a href="#menu" class="hover:text-orange-500 font-medium hidden md:block">菜单</a>
+            <a href="#reviews" class="hover:text-orange-500 font-medium hidden md:block">食客评价</a>
+            <!-- 购物车按钮 -->
+            <button @click="cartOpen = true" class="relative bg-orange-500 text-white px-6 py-2 rounded-full font-bold hover:bg-orange-600 transition flex items-center gap-2">
+                <span>🛒 结算</span>
+                <template x-if="cartTotal > 0">
+                    <span class="bg-red-200 text-red-700 text-xs px-2 py-0.5 rounded-full" x-text="'¥' + cartTotal"></span>
+                </template>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 首屏 -->
+    <header class="h-[60vh] bg-fried-chicken flex flex-col justify-center items-center text-white text-center px-4">
+        <h1 class="text-5xl font-bold mb-4 font-brand">酥脆外壳，多汁灵魂</h1>
+        <p class="text-xl mb-8">深夜的救赎，从这一口开始。</p>
+    </header>
+
+    <!-- 菜单 (点击按钮会增加购物车总额) -->
+    <section id="menu" class="py-16 max-w-6xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-10 font-brand text-orange-700">老板推荐</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white rounded-2xl overflow-hidden shadow-lg p-4">
+                <img src="https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=400&q=80" class="rounded-xl mb-4 w-full h-40 object-cover">
+                <h3 class="font-bold text-lg">黄金秘制原味</h3>
+                <p class="text-gray-500 text-sm mb-4">咬下去真的有“咔嚓”声！</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-xl font-bold text-orange-600">¥38</span>
+                    <button @click="cartTotal += 38; cartOpen = true" class="bg-orange-100 text-orange-600 px-4 py-1 rounded-full font-bold hover:bg-orange-200">+ 加入</button>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl overflow-hidden shadow-lg p-4">
+                <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=400&q=80" class="rounded-xl mb-4 w-full h-40 object-cover">
+                <h3 class="font-bold text-lg">韩式琥珀甜辣</h3>
+                <p class="text-gray-500 text-sm mb-4">追剧必备，甜辣入魂。</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-xl font-bold text-orange-600">¥42</span>
+                    <button @click="cartTotal += 42; cartOpen = true" class="bg-orange-100 text-orange-600 px-4 py-1 rounded-full font-bold hover:bg-orange-200">+ 加入</button>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl overflow-hidden shadow-lg p-4">
+                <img src="https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=400&q=80" class="rounded-xl mb-4 w-full h-40 object-cover">
+                <h3 class="font-bold text-lg">芝士雪花炸鸡</h3>
+                <p class="text-gray-500 text-sm mb-4">浓郁芝士粉，快乐加倍。</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-xl font-bold text-orange-600">¥45</span>
+                    <button @click="cartTotal += 45; cartOpen = true" class="bg-orange-100 text-orange-600 px-4 py-1 rounded-full font-bold hover:bg-orange-200">+ 加入</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 用户评价 -->
+    <section id="reviews" class="bg-orange-100 py-16 px-4">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-10 font-brand">吃货们怎么说</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- 评价卡片 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <div class="flex text-yellow-400 mb-2">★★★★★</div>
+                    <p class="text-gray-700 italic mb-4">“皮特别脆，里面的肉竟然还有汁水，这在炸鸡界是极其罕见的！”</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-gray-200 rounded-full"></div>
+                        <span class="font-bold text-sm">爱吃鸡的小王</span>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <div class="flex text-yellow-400 mb-2">★★★★★</div>
+                    <p class="text-gray-700 italic mb-4">“外送过来竟然没软掉，包装很用心，那个甜辣酱绝了。”</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-gray-200 rounded-full"></div>
+                        <span class="font-bold text-sm">深夜加班狗</span>
+                    </div>
+                </div>
+                <!-- 更多评价可以类推 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 支付弹窗 (Modal) -->
+    <div x-show="cartOpen" class="fixed inset-0 bg-black/60 z-[100] flex justify-center items-center p-4">
+        <div class="bg-white rounded-3xl w-full max-w-md p-8 relative" @click.away="cartOpen = false">
+            <button @click="cartOpen = false" class="absolute top-4 right-4 text-gray-400 hover:text-black text-2xl">&times;</button>
+            
+            <div x-show="!paySuccess">
+                <h3 class="text-2xl font-bold mb-6">确认订单</h3>
+                <div class="flex justify-between mb-4 border-b pb-4 text-lg">
+                    <span>合计金额：</span>
+                    <span class="font-bold text-orange-600" x-text="'¥' + cartTotal"></span>
+                </div>
+                <p class="text-gray-500 mb-6 text-sm">请选择支付方式：</p>
+                <div class="space-y-3">
+                    <button @click="paySuccess = true" class="w-full flex items-center justify-center gap-3 border-2 border-green-500 p-3 rounded-xl hover:bg-green-50 transition">
+                        <span class="text-green-600 font-bold text-lg">WeChat Pay 微信支付</span>
+                    </button>
+                    <button @click="paySuccess = true" class="w-full flex items-center justify-center gap-3 border-2 border-blue-500 p-3 rounded-xl hover:bg-blue-50 transition">
+                        <span class="text-blue-600 font-bold text-lg">Alipay 支付宝</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 支付成功状态 -->
+            <div x-show="paySuccess" class="text-center py-10">
+                <div class="text-6xl mb-4">🎉</div>
+                <h3 class="text-2xl font-bold text-green-600 mb-2">下单成功！</h3>
+                <p class="text-gray-500">后厨正在拼命炸鸡中...</p>
+                <button @click="cartOpen = false; paySuccess = false; cartTotal = 0" class="mt-8 bg-gray-900 text-white px-8 py-2 rounded-full">回到首页</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-gray-900 text-white py-12 text-center mt-20">
+        <p class="mb-4 font-brand text-2xl">酥脆灵魂 Fried Chicken Co.</p>
+        <p class="text-gray-400 text-sm">© 2026 酥脆灵魂. 支付系统由模拟器驱动</p>
+    </footer>
+
+</body>
+</html>
